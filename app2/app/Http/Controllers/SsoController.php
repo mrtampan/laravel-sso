@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Http;
 
 class SsoController extends Controller
 {
-    public function __invoke(String $token, Request $request)
+    public function Index(String $token, Request $request)
     {
         
         $getUser = Http::withHeaders([

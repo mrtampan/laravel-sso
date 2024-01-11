@@ -17,16 +17,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-
-    
-    if (Cookie::has('ssotoken') && !Auth::check()) {
-
-        return redirect()->route('sso', Cookie::get('ssotoken'));
-    }
     return view('welcome');
 });
 
-Route::get('/sso/{token}', SsoController::class)->name('sso');
+Route::get('/sso/{token}', [SsoController::class, 'Index'])->name('sso');
 Auth::routes(
     ['register' => false, 'reset' => false, 'verify' => false],
 );

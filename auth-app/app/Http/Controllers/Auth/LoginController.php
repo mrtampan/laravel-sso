@@ -43,11 +43,16 @@ class LoginController extends Controller
 
     public function authenticated(Request $request, $user){
         $token = $user->createToken('ssotoken')->plainTextToken;
-        Cookie::queue('ssotoken', $token, 60 * 24 * 7, null, 'localhost');
+        Cookie::queue('ssotoken', $token, 60 * 24 * 7, null, env('SESSION_DOMAIN'));
 
         if ($request->redirect_url) {
 
             return redirect($request->redirect_url . '/sso/' . $token);
         }
+    }
+
+    public function loggedOut(Request $request)
+    {
+        Cookie::queue(Cookie::forget('ssotoken'));
     }
 }
