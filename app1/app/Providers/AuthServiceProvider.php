@@ -3,7 +3,13 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use App\Http\Controllers\SsoController;
+use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Http;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +27,11 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (Cookie::has('ssotoken') && !Auth::check()) {
+
+            App(SsoController::class)->AuthSso(Cookie::get('ssotoken'));
+        }else{
+            Auth::logout();
+        }
     }
 }

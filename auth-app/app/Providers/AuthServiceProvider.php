@@ -4,6 +4,9 @@ namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,15 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        if (Cookie::has('ssotoken') && !Auth::check()) {
+
+            $accessToken = PersonalAccessToken::findToken(Cookie::get('ssotoken'));
+
+            if ($accessToken) {
+                Auth::loginUsingId($accessToken->tokenable_id);
+            }
+        }else{
+            Auth::logout();
+        }
     }
 }
