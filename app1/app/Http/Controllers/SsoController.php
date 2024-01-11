@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\Http;
 
 class SsoController extends Controller
 {
-    public function __invoke(String $token)
+    public function __invoke(String $token, Request $request)
     {
         
         $getUser = Http::withHeaders([
             'Authorization' => 'Bearer ' . urldecode($token),
-        ])->get('http://192.168.222.111:8000/api/user');
+        ])->get('http://'. $request->ip() .':8000/api/user');
 
         
         $user = User::updateorCreate([

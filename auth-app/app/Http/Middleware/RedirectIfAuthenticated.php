@@ -23,7 +23,7 @@ class RedirectIfAuthenticated
             if (Auth::guard($guard)->check()) {
 
                 if($request->query('redirect_url')){
-                    return redirect($request->query('redirect_url') . '/sso/' . $request->session()->token());
+                    return redirect($request->query('redirect_url') . '/sso/' . $request->user()->createToken('sso')->plainTextToken);
                 }
 
                 return redirect(RouteServiceProvider::HOME);
